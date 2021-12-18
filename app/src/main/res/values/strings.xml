@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Do I need it?</string>
+    <string name="email_txt">Email</string>
+    <string name="txt_password">Password</string>
+</resources>
