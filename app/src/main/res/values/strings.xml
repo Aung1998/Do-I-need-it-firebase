@@ -2,4 +2,7 @@
     <string name="app_name">Do I need it?</string>
     <string name="email_txt">Email</string>
     <string name="txt_password">Password</string>
+    <string name="img_logo_description">Logo of the app</string>
+    <string name="txt_btn_login">Login</string>
+    <string name="txt_btn_register">No Account? Register here!</string>
 </resources>
