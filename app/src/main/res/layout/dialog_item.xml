@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="400dp"
+    android:layout_height="250dp">
+
+    <TextView
+        android:id="@+id/textView_Item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="26dp"
+        android:text="@string/item_add_title"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="66dp"
+        android:weightSum="3"
+        app:layout_constraintBottom_toTopOf="@+id/btn_item_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Item_title">
+
+        <EditText
+            android:id="@+id/etItemName"
+            android:layout_width="101dp"
+            android:layout_height="48dp"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:hint="@string/item_name"
+            android:inputType="text"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvCancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.069"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.661" />
+
+        <EditText
+            android:id="@+id/etItemQuantity"
+            android:layout_width="60dp"
+            android:layout_height="48dp"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:hint="@string/item_quantity"
+            android:inputType="number"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/etItemPrice"
+            app:layout_constraintHorizontal_bias="0.461"
+            app:layout_constraintStart_toEndOf="@+id/etItemName"
+            app:layout_constraintTop_toBottomOf="@+id/textView_Item_title"
+            app:layout_constraintVertical_bias="0.276" />
+
+        <EditText
+            android:id="@+id/etItemPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:hint="@string/item_price"
+            android:inputType="number"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.861"
+            app:layout_constraintStart_toEndOf="@+id/etItemName"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_item_save"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/item_add"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_item_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <Button
+        android:id="@+id/btn_item_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/item_cancel"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBoxPurchased"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_cb_purchased"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.693" />
+
+    <CheckBox
+        android:id="@+id/checkBoxLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:text="@string/txt_cb_purchased"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxPurchased"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.693" />
+</androidx.constraintlayout.widget.ConstraintLayout>

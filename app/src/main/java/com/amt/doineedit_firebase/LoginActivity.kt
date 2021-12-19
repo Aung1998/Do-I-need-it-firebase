@@ -6,14 +6,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.Toast
+import com.amt.doineedit_firebase.appDB.Item
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private var user: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
         val btnNavRegister = findViewById<Button>(R.id.btn_to_register)
 
         btnNavRegister.setOnClickListener { navigateToRegister() }
+
+        val ref = FirebaseDatabase.getInstance().reference
 
         btnLogin.setOnClickListener{
             val email = findViewById<TextInputLayout>(R.id.textLayout_email)
@@ -38,16 +46,18 @@ class LoginActivity : AppCompatActivity() {
                 accountLogin(email, password)
             }
         }
-
-
     }
 
     private fun accountLogin(email:String, password:String) {
         auth = Firebase.auth
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-            if (task.isSuccessful){
-                //val intent = Intent(this, )
+            if (task.isSuccessful) {
+                val intent = Intent(this, ItemsActivity::class.java)
+                startActivity(intent)
+            }
+            else{
+                Log.w("Login", task.exception)
             }
         }
             .addOnFailureListener {

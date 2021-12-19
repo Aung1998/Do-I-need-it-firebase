@@ -17,7 +17,7 @@
         android:contentDescription="@string/img_logo_description" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textLayout_email"
+        android:id="@+id/textLayoutEmail"
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:layout_margin="25dp"
@@ -32,14 +32,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textLayout_password"
+        android:id="@+id/textLayoutPassword"
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:layout_margin="25dp"
         android:hint="@string/txt_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayout_email">
+        app:layout_constraintTop_toBottomOf="@+id/textLayoutEmail">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -48,14 +48,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textLayout_ConfirmPassword"
+        android:id="@+id/textLayoutConfirmPassword"
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:layout_margin="25dp"
         android:hint="@string/txt_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayout_password">
+        app:layout_constraintTop_toBottomOf="@+id/textLayoutPassword">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
         android:text="@string/txt_btn_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayout_ConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/textLayoutConfirmPassword" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_to_login"
@@ -82,5 +82,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/password_not_matched"
+        android:visibility="invisible"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.429"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLayoutConfirmPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

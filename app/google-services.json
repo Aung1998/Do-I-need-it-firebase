@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "317072569691",
+    "firebase_url": "https://do-i-need-it-39069-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "do-i-need-it-39069",
     "storage_bucket": "do-i-need-it-39069.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:317072569691:android:8786a3564d0fc67d57167e",
+        "mobilesdk_app_id": "1:317072569691:android:b391db9db838421e57167e",
         "android_client_info": {
           "package_name": "com.amt.doineedit_firebase"
         }

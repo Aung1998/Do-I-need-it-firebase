@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoINeedItFirebase">
         <activity
+            android:name=".ItemsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_items"
+            android:theme="@style/Theme.DoINeedItFirebase.NoActionBar" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
