@@ -20,6 +20,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val btnLogin = findViewById<Button>(R.id.btn_login)
+        val btnNavRegister = findViewById<Button>(R.id.btn_to_register)
+
+        btnNavRegister.setOnClickListener { navigateToRegister() }
+
         btnLogin.setOnClickListener{
             val email = findViewById<TextInputLayout>(R.id.textLayout_email)
                 .editText?.text.toString()
@@ -34,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
                 accountLogin(email, password)
             }
         }
+
+
     }
 
     private fun accountLogin(email:String, password:String) {
@@ -47,5 +53,10 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(applicationContext, "Wrong email or password", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun navigateToRegister(){
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
     }
 }
