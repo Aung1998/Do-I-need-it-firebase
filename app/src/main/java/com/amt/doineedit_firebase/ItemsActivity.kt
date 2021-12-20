@@ -24,6 +24,7 @@ class ItemsActivity : AppCompatActivity() {
     private lateinit var itemArrayList: ArrayList<Item>
     private lateinit var user: FirebaseUser
     private lateinit var auth: FirebaseAuth
+    private lateinit var itemIdList: ArrayList<String>
     val ref = FirebaseDatabase.getInstance().reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +35,9 @@ class ItemsActivity : AppCompatActivity() {
         user = auth.currentUser!!
 
         itemArrayList = ArrayList<Item>()
+        itemIdList = ArrayList<String>()
         val recyclerView = findViewById<RecyclerView>(R.id.rvItems)
-        val recyclerViewAdapter = RecyclerViewAdapter(itemArrayList)
+        val recyclerViewAdapter = RecyclerViewAdapter(itemArrayList, itemIdList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerViewAdapter
 
@@ -43,11 +45,12 @@ class ItemsActivity : AppCompatActivity() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val items = snapshot.getValue(Item::class.java)
                 itemArrayList.add(Item(items!!.itemName, items.price, items.quantity, items.haveItem))
+                itemIdList.add(snapshot.key.toString())
                 recyclerViewAdapter.notifyDataSetChanged()
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
+                recyclerViewAdapter.notifyDataSetChanged()
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
