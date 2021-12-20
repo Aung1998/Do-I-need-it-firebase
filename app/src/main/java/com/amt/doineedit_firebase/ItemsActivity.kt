@@ -1,7 +1,9 @@
 package com.amt.doineedit_firebase
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -21,13 +23,15 @@ import java.util.ArrayList
 class ItemsActivity : AppCompatActivity() {
     private lateinit var itemArrayList: ArrayList<Item>
     private lateinit var user: FirebaseUser
+    private lateinit var auth: FirebaseAuth
     val ref = FirebaseDatabase.getInstance().reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items)
 
-        user = FirebaseAuth.getInstance().currentUser!!
+        auth = FirebaseAuth.getInstance()
+        user = auth.currentUser!!
 
         itemArrayList = ArrayList<Item>()
         val recyclerView = findViewById<RecyclerView>(R.id.rvItems)
@@ -35,39 +39,42 @@ class ItemsActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerViewAdapter
 
-        if (user != null){
-            ref.child(("Items")).child(user!!.uid).addChildEventListener(object:ChildEventListener{
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val items = snapshot.getValue(Item::class.java)
-                    itemArrayList.add(Item(items!!.itemName, items.price, items.quantity, items.haveItem))
-                    recyclerViewAdapter.notifyDataSetChanged()
-                }
+        ref.child(("Items")).child(user.uid).addChildEventListener(object:ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val items = snapshot.getValue(Item::class.java)
+                itemArrayList.add(Item(items!!.itemName, items.price, items.quantity, items.haveItem))
+                recyclerViewAdapter.notifyDataSetChanged()
+            }
 
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
 
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    TODO("Not yet implemented")
-                }
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
 
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
-                }
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
+            override fun onCancelled(error: DatabaseError) {
+               Log.i("Log Out", "logout successful!")
+            }
 
-            })
+        })
+    }
 
-        }
+    fun logOut(v:View){
+        auth.signOut()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     fun addItem(v:View){
         ItemDialog(v.context, object : DialogListener{
             override fun onAddButtonClicked(item: Item){
-                ref.child("Items").child(user!!.uid)
+                ref.child("Items").child(user.uid)
                     .push()
                     .setValue(item)
             }

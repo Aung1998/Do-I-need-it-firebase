@@ -18,22 +18,24 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>):
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         val currentItem = itemArrayList[position]
-        val tvName = holder.itemView.findViewById<TextView>(R.id.tvName)!!
-        val tvPrice = holder.itemView.findViewById<TextView>(R.id.tvPrice)!!
-        val tvQuantity = holder.itemView.findViewById<TextView>(R.id.tvQuantity)!!
-        val cbPurchased = holder.itemView.findViewById<CheckBox>(R.id.cbPurchased)!!
+        holder.tvName.text = currentItem.itemName
+        holder.tvPrice.text = "$${currentItem.price}"
+        holder.tvQuantity.text = "${currentItem.quantity}"
+        holder.cbPurchased.isChecked = currentItem.haveItem
 
-        tvName.text = currentItem.itemName
-        tvPrice.text = "$${currentItem.price}"
-        tvQuantity.text = "${currentItem.quantity}"
-        cbPurchased.isChecked = currentItem.haveItem
+        //holder.itemView.setOnClickListener()
     }
 
     override fun getItemCount(): Int {
         return itemArrayList.count()
     }
 
-    inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
+    inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvName = itemView.findViewById<TextView>(R.id.tvName)!!
+        val tvPrice = itemView.findViewById<TextView>(R.id.tvPrice)!!
+        val tvQuantity = itemView.findViewById<TextView>(R.id.tvQuantity)!!
+        val cbPurchased = itemView.findViewById<CheckBox>(R.id.cbPurchased)!!
+    }
 
 
 }

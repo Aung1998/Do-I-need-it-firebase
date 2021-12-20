@@ -19,7 +19,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.DoINeedItFirebase.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.DoINeedItFirebase.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
