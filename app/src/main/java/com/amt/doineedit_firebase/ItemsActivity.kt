@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity.apply
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -119,8 +120,22 @@ class ItemsActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                ref.child("Items").child(user.uid).child(itemIdList[viewHolder.adapterPosition])
-                    .removeValue()
+                if(direction == ItemTouchHelper.RIGHT) {
+                    // remove data from database
+                    ref.child("Items").child(user.uid)
+                        .child(itemIdList[viewHolder.adapterPosition])
+                        .removeValue()
+                }
+                else{
+
+                    ItemDialog(viewHolder.itemView.context, object : DialogListener{
+                        override fun onAddButtonClicked(item: Item){
+                            ref.child("Items").child(user.uid)
+                                .child(itemIdList[viewHolder.adapterPosition])
+                                .updateChildren(item.toMap())
+                        }
+                    }).show()
+                }
             }
         }
         return ItemTouchHelper(itemTouchCallback)

@@ -1,6 +1,7 @@
 package com.amt.doineedit_firebase
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,15 +31,19 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         holder.cbPurchased.isChecked = currentItem.haveItem
 
         holder.itemView.setOnClickListener{
-            val user = FirebaseAuth.getInstance().currentUser!!
-            val ref = FirebaseDatabase.getInstance().reference
-            ItemDialog(holder.itemView.context, object : DialogListener{
-                override fun onAddButtonClicked(item: Item){
-                    ref.child("Items").child(user.uid).child(itemIDList[holder.adapterPosition])
-                        .updateChildren(item.toMap())
-                }
-            }).show()
+            val item = itemArrayList[holder.adapterPosition]
+            val message = "Item Name - ${item.itemName}\n " +
+                    "Quantity - ${item.quantity}\n" +
+                    "Price - ${item.price}" +
+                    "Have bought? - ${if(item.haveItem) "yes" else "no"}"
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, message)
+                type = "text/plain"
+            }
 
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            holder.itemView.context.startActivity(shareIntent)
         }
     }
 
