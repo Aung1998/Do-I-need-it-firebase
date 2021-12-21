@@ -5,13 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amt.doineedit_firebase.appDB.Item
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ChildEventListener
@@ -34,6 +31,8 @@ class ItemsActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser!!
 
+        val itemTouchHelper = createItemTouchListener()
+
         itemArrayList = ArrayList<Item>()
         itemIdList = ArrayList<String>()
         val recyclerView = findViewById<RecyclerView>(R.id.rvItems)
@@ -41,20 +40,41 @@ class ItemsActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerViewAdapter
 
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
         ref.child(("Items")).child(user.uid).addChildEventListener(object:ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val items = snapshot.getValue(Item::class.java)
-                itemArrayList.add(Item(items!!.itemName, items.price, items.quantity, items.haveItem))
+                val item = snapshot.getValue(Item::class.java)
+                itemArrayList.add(Item(item!!.itemName, item.price, item.quantity, item.haveItem))
                 itemIdList.add(snapshot.key.toString())
                 recyclerViewAdapter.notifyDataSetChanged()
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                recyclerViewAdapter.notifyDataSetChanged()
+                val item = snapshot.getValue(Item::class.java)
+                if (item != null) {
+                    for (i in 0 until itemArrayList.size) {
+                        if (itemArrayList[i].toMap() != item.toMap()) {
+                            itemArrayList[i] = item
+                            break
+                        }
+                    }
+                    recyclerViewAdapter.notifyDataSetChanged()
+                }
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
+                val item = snapshot.getValue(Item::class.java)
+                if (item != null) {
+                    for (i in 0 until itemArrayList.size) {
+                        if (itemArrayList[i].toMap() == item.toMap()) {
+                            itemArrayList.removeAt(i)
+                            itemIdList.removeAt(i)
+                            recyclerViewAdapter.notifyItemRemoved(i)
+                            break
+                        }
+                    }
+                }
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
@@ -84,7 +104,25 @@ class ItemsActivity : AppCompatActivity() {
         }).show()
     }
 
-    private fun loadItem(){
+    private fun createItemTouchListener(): ItemTouchHelper {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
 
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                ref.child("Items").child(user.uid).child(itemIdList[viewHolder.adapterPosition])
+                    .removeValue()
+            }
+        }
+        return ItemTouchHelper(itemTouchCallback)
     }
 }

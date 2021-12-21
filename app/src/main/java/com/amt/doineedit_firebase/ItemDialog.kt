@@ -35,22 +35,23 @@ class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompat
 
         btn_save?.setOnClickListener {
             val itemName: String = name_item?.text.toString()
-            val quantity: Int = quantity_item?.text.toString().toInt()
-            val price: Float = price_item?.text.toString().toFloat()
+            val quantity: String = quantity_item?.text.toString()
+            val price: String = price_item?.text.toString()
             val purchased: Boolean = cb_purchased!!.isChecked
 
             //val email: String = sharedPreferences.getString("Logged_in_email", "null")!!
 
-            if (itemName.isEmpty()){
-                Toast.makeText(context,"Please Enter Item Name",Toast.LENGTH_SHORT).show()
+            if (itemName.isEmpty() || quantity.isEmpty() || price.isEmpty()){
+                Toast.makeText(context,"Please Fill All!",Toast.LENGTH_SHORT).show()
             }
+            else{
+                val item : Item = Item(itemName = itemName, quantity = quantity.toInt(),
+                    price = price.toFloat(), haveItem = purchased)
 
-            val item : Item = Item(itemName = itemName, quantity = quantity,
-                price = price, haveItem = purchased)
+                dialogListener.onAddButtonClicked(item)
 
-            dialogListener.onAddButtonClicked(item)
-
-            dismiss()
+                dismiss()
+            }
         }
 
         btn_cancel?.setOnClickListener { cancel() }

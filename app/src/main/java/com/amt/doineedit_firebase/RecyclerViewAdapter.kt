@@ -34,11 +34,11 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
             val ref = FirebaseDatabase.getInstance().reference
             ItemDialog(holder.itemView.context, object : DialogListener{
                 override fun onAddButtonClicked(item: Item){
-                    ref.child("Items").child(user.uid).child(itemIDList[position])
+                    ref.child("Items").child(user.uid).child(itemIDList[holder.adapterPosition])
                         .updateChildren(item.toMap())
                 }
             }).show()
-            Log.i("Item id", itemIDList[position])
+
         }
     }
 
