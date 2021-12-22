@@ -19,4 +19,5 @@
     <string name="item_cancel">Cancel</string>
     <string name="item_add">Done</string>
     <string name="txt_log_out">Log Out</string>
+    <string name="txt_cb_location">Add Current Location?</string>
 </resources>
