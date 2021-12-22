@@ -22,6 +22,7 @@ class ItemsActivity : AppCompatActivity() {
     private lateinit var itemArrayList: ArrayList<Item>
     private lateinit var user: FirebaseUser
     private lateinit var auth: FirebaseAuth
+    private lateinit var recyclerViewAdapter: RecyclerViewAdapter
     private lateinit var itemIdList: ArrayList<String>
     val ref = FirebaseDatabase.getInstance().reference
 
@@ -37,7 +38,7 @@ class ItemsActivity : AppCompatActivity() {
         itemArrayList = ArrayList<Item>()
         itemIdList = ArrayList<String>()
         val recyclerView = findViewById<RecyclerView>(R.id.rvItems)
-        val recyclerViewAdapter = RecyclerViewAdapter(itemArrayList, itemIdList)
+        recyclerViewAdapter = RecyclerViewAdapter(itemArrayList, itemIdList)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerViewAdapter
 
@@ -135,6 +136,7 @@ class ItemsActivity : AppCompatActivity() {
                                 .updateChildren(item.toMap())
                         }
                     }).show()
+                    recyclerViewAdapter.notifyDataSetChanged()
                 }
             }
         }

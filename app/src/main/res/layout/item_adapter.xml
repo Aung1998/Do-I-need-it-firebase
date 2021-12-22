@@ -21,18 +21,18 @@
             android:id="@+id/tvPrice"
             android:layout_width="120dp"
             android:textAlignment="center"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tvQuantity"
             android:layout_width="120dp"
             android:textAlignment="center"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
         <CheckBox
             android:id="@+id/cbPurchased"
             android:layout_width="wrap_content"
             android:text="@string/txt_cb_purchased"
             android:textAlignment="center"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

@@ -30,6 +30,8 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         holder.tvQuantity.text = "${currentItem.quantity}"
         holder.cbPurchased.isChecked = currentItem.haveItem
 
+        holder.cbPurchased.isEnabled = false
+
         holder.itemView.setOnClickListener{
             val item = itemArrayList[holder.adapterPosition]
             val message = "Item Name - ${item.itemName}\n " +
