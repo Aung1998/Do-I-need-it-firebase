@@ -25,6 +25,7 @@ class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompat
         val quantity_item:EditText? = findViewById(R.id.etItemQuantity)
         val price_item:EditText? = findViewById(R.id.etItemPrice)
         val cb_purchased:CheckBox? = findViewById(R.id.checkBoxPurchased)
+        val cb_location:CheckBox? = findViewById(R.id.checkBoxLocated)
 
         val btn_save: Button? = findViewById(R.id.btn_item_save)
         val btn_cancel: Button? = findViewById(R.id.btn_item_cancel)
@@ -38,6 +39,7 @@ class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompat
             val quantity: String = quantity_item?.text.toString()
             val price: String = price_item?.text.toString()
             val purchased: Boolean = cb_purchased!!.isChecked
+            val located: Boolean = cb_location!!.isChecked
 
             //val email: String = sharedPreferences.getString("Logged_in_email", "null")!!
 
@@ -49,6 +51,10 @@ class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompat
                     price = price.toFloat(), haveItem = purchased)
 
                 dialogListener.onAddButtonClicked(item)
+
+                if(located){
+                    dialogListener.geoAdd("item key")
+                }
 
                 dismiss()
             }
