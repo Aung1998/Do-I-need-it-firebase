@@ -243,25 +243,18 @@ class ItemsActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 if(direction == ItemTouchHelper.RIGHT) {
-                    // remove data from database
-                    ref.child("Users").child(user.uid).child("Items")
-                        .child(itemIdList[viewHolder.adapterPosition])
-                        .removeValue()
+                    //Show Item if Menu is show else delete Item
+                    if (recyclerViewAdapter.isMenuShown()){
+                        recyclerViewAdapter.closeMenu()
+                    }
+                    else{
+                        ref.child("Users").child(user.uid).child("Items")
+                            .child(itemIdList[viewHolder.adapterPosition])
+                            .removeValue()
+                        }
                 }
                 else{
-
-                    ItemDialog(viewHolder.itemView.context, object : DialogListener{
-                        override fun onAddButtonClicked(item: Item){
-                            ref.child("Users").child(user.uid).child("Items")
-                                .child(itemIdList[viewHolder.adapterPosition])
-                                .updateChildren(item.toMap())
-                        }
-
-                        override fun geoAdd(itemKey: String) {
-                            // add location later
-                        }
-                    }).show()
-                    recyclerViewAdapter.notifyDataSetChanged()
+                    recyclerViewAdapter.showMenu(viewHolder.adapterPosition);
                 }
             }
         }
