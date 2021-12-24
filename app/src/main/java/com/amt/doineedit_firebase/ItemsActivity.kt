@@ -124,7 +124,7 @@ class ItemsActivity : AppCompatActivity() {
             override fun onProviderEnabled(provider: String) {}
             override fun onProviderDisabled(provider: String) {}
         }
-//------------------------------------------------------//
+
         val networkLocationListener: LocationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 locationByNetwork = location
@@ -144,7 +144,7 @@ class ItemsActivity : AppCompatActivity() {
                     gpsLocationListener
                 )
             }
-//------------------------------------------------------//
+
             if (hasNetwork) {
                 locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER,
@@ -166,6 +166,7 @@ class ItemsActivity : AppCompatActivity() {
                 locationByNetwork = lastKnownLocationByNetwork
             }
 
+            // Choose current location the better between GPS Location and Network Location
             currentLocation = if (locationByGps!!.accuracy > locationByNetwork!!.accuracy) {
                 locationByGps
             } else {
@@ -195,6 +196,7 @@ class ItemsActivity : AppCompatActivity() {
                     .child(key).setValue(item)
             }
 
+            // Work only if location checkbox is checked
             override fun geoAdd(itemKey: String) {
                 val geofire = GeoFire(ref.child("Users").child(user.uid).child("Item locations"))
                 geofire
@@ -242,6 +244,7 @@ class ItemsActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
+                //Right
                 if(direction == ItemTouchHelper.RIGHT) {
                     //Show Item if Menu is show else delete Item
                     if (recyclerViewAdapter.isMenuShown()){
@@ -253,6 +256,7 @@ class ItemsActivity : AppCompatActivity() {
                             .removeValue()
                         }
                 }
+                //Left
                 else{
                     recyclerViewAdapter.showMenu(viewHolder.adapterPosition);
                 }

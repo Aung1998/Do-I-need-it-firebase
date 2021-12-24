@@ -50,7 +50,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemHolder){
+        if (holder is ItemHolder){//Check if view Holder is Item View Holder or
             val currentItem = itemArrayList[position]
             holder.tvName.text = currentItem.itemName
             holder.tvPrice.text = "$${currentItem.price}"
@@ -75,10 +75,12 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                 holder.itemView.context.startActivity(shareIntent)
             }
         }
-        else if (holder is MenuHolder){
+        else if (holder is MenuHolder){ // Menu View Holder
+            // itemID for specifics item.
             val itemID = itemIDList[holder.adapterPosition]
             val user = FirebaseAuth.getInstance().currentUser
             val ref = FirebaseDatabase.getInstance().reference
+            //Edit Item Button
             (holder as MenuHolder).btnEditText.setOnClickListener{
                 ItemDialog(it.context, object : DialogListener{
                     override fun onAddButtonClicked(item: Item){
@@ -93,6 +95,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                 }).show()
                 notifyDataSetChanged()
             }
+            //Location Button
             (holder as MenuHolder).btnFindLocation.setOnClickListener{
                 val geoFire = GeoFire(ref.child("Users").child(user!!.uid).child("Item locations"))
                 val location =geoFire.getLocation(itemID, object: LocationCallback{
@@ -123,6 +126,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
     }
 
 
+//Switch to Menu View
     fun showMenu(position: Int) {
         for (i in 0 until itemArrayList.size) {
             itemArrayList[i].showMenu = false
@@ -132,6 +136,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
     }
 
 
+//Check if the MEnu View is switched
     fun isMenuShown(): Boolean {
         for (i in 0 until itemArrayList.size) {
             if (itemArrayList[i].showMenu) {
@@ -141,6 +146,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         return false
     }
 
+//Switch to item View
     fun closeMenu() {
         for (i in 0 until itemArrayList.size) {
             itemArrayList[i].showMenu = false
@@ -148,6 +154,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         notifyDataSetChanged()
     }
 
+//Item View Holder Class
     inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName = itemView.findViewById<TextView>(R.id.tvName)!!
         val tvPrice = itemView.findViewById<TextView>(R.id.tvPrice)!!
@@ -155,6 +162,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         val cbPurchased = itemView.findViewById<CheckBox>(R.id.cbPurchased)!!
     }
 
+//Menu View Holder Class
     inner class MenuHolder(menuView: View) : RecyclerView.ViewHolder(menuView) {
         val btnEditText = menuView.findViewById<Button>(R.id.btnEditItem)
         val btnFindLocation = menuView.findViewById<Button>(R.id.btnFindLocation)
