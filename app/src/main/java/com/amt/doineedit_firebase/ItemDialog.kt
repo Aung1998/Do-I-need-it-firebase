@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatDialog
 import com.amt.doineedit_firebase.appDB.Item
 import com.amt.doineedit_firebase.R
 
-class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompatDialog(context) {
+class ItemDialog(context: Context,var dialogListener: DialogListener, var editItem:Item? = null): AppCompatDialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,13 @@ class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompat
 
         val btn_save: Button? = findViewById(R.id.btn_item_save)
         val btn_cancel: Button? = findViewById(R.id.btn_item_cancel)
+
+        if (editItem != null){
+            name_item!!.setText(editItem!!.itemName)
+            quantity_item!!.setText(editItem!!.quantity.toString())
+            price_item!!.setText(editItem!!.price.toString())
+            cb_purchased!!.isChecked = editItem!!.haveItem
+        }
 
         btn_cancel?.setOnClickListener {
             cancel()
@@ -48,7 +55,7 @@ class ItemDialog(context: Context,var dialogListener: DialogListener): AppCompat
             }
             else{
                 val item : Item = Item(itemName = itemName, quantity = quantity.toInt(),
-                    price = price.toFloat(), haveItem = purchased)
+                    price = price.toDouble(), haveItem = purchased)
 
                 dialogListener.onAddButtonClicked(item)
 

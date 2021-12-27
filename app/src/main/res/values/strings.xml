@@ -4,8 +4,8 @@
     <string name="txt_password">Password</string>
     <string name="img_logo_description">Logo of the app</string>
     <string name="txt_btn_login">Login</string>
-    <string name="txt_btn_to_register">No Account? Register here!</string>
-    <string name="txt_btn_to_login">Already had an account? Login here!</string>
+    <string name="txt_btn_to_register">Register here!</string>
+    <string name="txt_btn_to_login">Login here!</string>
     <string name="txt_btn_register">Register</string>
     <string name="password_not_matched">Password not matched!</string>
     <string name="title_activity_items">ItemsActivity</string>
@@ -22,4 +22,5 @@
     <string name="txt_cb_location">Add Current Location?</string>
     <string name="txt_btn_edit_item">Edit Item</string>
     <string name="go_to_the_location">Go to the Location</string>
+    <string name="txt_confirm_password">Confirm Password</string>
 </resources>

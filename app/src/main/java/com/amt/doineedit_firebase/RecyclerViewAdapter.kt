@@ -77,6 +77,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         }
         else if (holder is MenuHolder){
             val itemID = itemIDList[holder.adapterPosition]
+            val item = itemArrayList[holder.adapterPosition]
             val user = FirebaseAuth.getInstance().currentUser
             val ref = FirebaseDatabase.getInstance().reference
             (holder as MenuHolder).btnEditText.setOnClickListener{
@@ -90,8 +91,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                     override fun geoAdd(itemKey: String) {
                         // add location later
                     }
-                }).show()
-                notifyDataSetChanged()
+                }, item).show()
             }
             (holder as MenuHolder).btnFindLocation.setOnClickListener{
                 val geoFire = GeoFire(ref.child("Users").child(user!!.uid).child("Item locations"))
@@ -112,7 +112,6 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                     override fun onCancelled(databaseError: DatabaseError?) {
                         TODO("Not yet implemented")
                     }
-
                 })
             }
         }
