@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity.apply
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amt.doineedit_firebase.appDB.Item
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ChildEventListener
@@ -37,21 +34,28 @@ class ItemsActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var recyclerViewAdapter: RecyclerViewAdapter
     private lateinit var itemIdList: ArrayList<String>
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var hasGps: Boolean = false
+    private var hasNetwork:Boolean = false
+    private var permission : Boolean = false
     val ref = FirebaseDatabase.getInstance().reference
-    var permission = false
+    private var currentLocation: Location? = null
+    private var locationByGps: Location? = null
+    private var locationByNetwork: Location? = null
+    private lateinit var locationManager: LocationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items)
 
         permission = isLocationPermissionGranted()
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        hasGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser!!
 
         val itemTouchHelper = createItemTouchListener()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         itemArrayList = ArrayList<Item>()
         itemIdList = ArrayList<String>()
@@ -108,7 +112,67 @@ class ItemsActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("MissingPermission")
+    fun location() {
+        val gpsLocationListener: LocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                locationByGps = location
+            }
 
+
+            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {}
+        }
+//------------------------------------------------------//
+        val networkLocationListener: LocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                locationByNetwork = location
+            }
+
+            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {}
+        }
+
+        if (permission) {
+            if (hasGps) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    5000,
+                    0F,
+                    gpsLocationListener
+                )
+            }
+//------------------------------------------------------//
+            if (hasNetwork) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    0F,
+                    networkLocationListener
+                )
+            }
+
+            val lastKnownLocationByGps =
+                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            lastKnownLocationByGps?.let {
+                locationByGps = lastKnownLocationByGps
+            }
+
+            val lastKnownLocationByNetwork =
+                locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            lastKnownLocationByNetwork?.let {
+                locationByNetwork = lastKnownLocationByNetwork
+            }
+
+            currentLocation = if (locationByGps!!.accuracy > locationByNetwork!!.accuracy) {
+                locationByGps
+            } else {
+                locationByNetwork
+            }
+        }
+    }
 
     fun logOut(v:View){
         auth.signOut()
@@ -117,6 +181,7 @@ class ItemsActivity : AppCompatActivity() {
     }
 
     fun addItem(v:View){
+        location()
         ItemDialog(v.context, object : DialogListener{
             lateinit var key: String
             override fun onAddButtonClicked(item: Item) {
@@ -129,23 +194,12 @@ class ItemsActivity : AppCompatActivity() {
                     .child("Items")
                     .child(key).setValue(item)
             }
-            // Will work only if Location is checked!
-            @SuppressLint("MissingPermission")
+
             override fun geoAdd(itemKey: String) {
                 val geofire = GeoFire(ref.child("Users").child(user.uid).child("Item locations"))
-                if (permission){
-                    fusedLocationClient.lastLocation
-                        .addOnSuccessListener { location : Location? ->
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null){
-                                geofire.setLocation(key, GeoLocation(location.latitude, location.longitude))
-                            }
-                            else{
-                                Toast.makeText(v.context, "Location Not Found!", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                }
+                geofire
+                    .setLocation(key,
+                        currentLocation?.let { GeoLocation(it.latitude, it.longitude) })
             }
         }).show()
     }
@@ -187,7 +241,7 @@ class ItemsActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val key = itemIdList[viewHolder.adapterPosition]
+                val position = viewHolder.adapterPosition
                 if(direction == ItemTouchHelper.RIGHT) {
                     //Show Item if Menu is show else delete Item
                     if (recyclerViewAdapter.isMenuShown()){
@@ -195,10 +249,7 @@ class ItemsActivity : AppCompatActivity() {
                     }
                     else{
                         ref.child("Users").child(user.uid).child("Items")
-                            .child(key)
-                            .removeValue()
-                        ref.child("Users").child(user.uid).child("Item locations")
-                            .child(key)
+                            .child(itemIdList[viewHolder.adapterPosition])
                             .removeValue()
                         }
                 }
