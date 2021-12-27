@@ -32,6 +32,13 @@ class RegisterActivity : AppCompatActivity() {
 
         val btnRegister = findViewById<Button>(R.id.btn_register)
 
+        val btnNavLogin = findViewById<Button>(R.id.btnNavLoogin)
+
+        btnNavLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         btnRegister.setOnClickListener{
             val email = findViewById<TextInputLayout>(R.id.textLayoutEmail)
                 .editText?.text.toString()
@@ -61,7 +68,7 @@ class RegisterActivity : AppCompatActivity() {
                     startActivity(intent)
             } else {
                 Log.w("Create user failed", task.exception)
-                Toast.makeText(baseContext, ".",
+                Toast.makeText(baseContext, task.exception!!.localizedMessage,
                     Toast.LENGTH_SHORT).show()
             }
             }
