@@ -43,13 +43,16 @@ class ItemsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items)
 
+        // Location permission
         permission = isLocationPermissionGranted()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
 
+        // User
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser!!
 
+        // Gesture Slide
         val itemTouchHelper = createItemTouchListener()
 
         itemArrayList = ArrayList<Item>()
@@ -59,6 +62,7 @@ class ItemsActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerViewAdapter
 
+        // Add Slide  Gesture to RecyclerView
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         ref.child(("Users")).child(user.uid).child("Items").addChildEventListener(object:ChildEventListener{
@@ -75,10 +79,10 @@ class ItemsActivity : AppCompatActivity() {
                     for (i in 0 until itemArrayList.size) {
                         if (itemArrayList[i].toMap() != item.toMap()) {
                             itemArrayList[i] = item
+                            recyclerViewAdapter.notifyItemChanged(i)
                             break
                         }
                     }
-                    recyclerViewAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -101,7 +105,7 @@ class ItemsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-               Log.i("Log Out", "logout successful!")
+               Toast.makeText(baseContext, error.message, Toast.LENGTH_SHORT).show()
             }
 
         })

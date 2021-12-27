@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please Enter Email or Password", Toast.LENGTH_SHORT).show()
             }
             else if(password != pass){
-                // do nothing
+                // do nothing since error message was shown as user type
             }
             else{
                 register(email, password)
@@ -63,11 +63,10 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task->
                 if (task.isSuccessful) {
-
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
             } else {
-                Log.w("Create user failed", task.exception)
+                // if registration failed, show the error message that user can understand
                 Toast.makeText(baseContext, task.exception!!.localizedMessage,
                     Toast.LENGTH_SHORT).show()
             }
