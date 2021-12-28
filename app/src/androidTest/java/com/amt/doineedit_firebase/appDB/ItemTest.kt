@@ -7,6 +7,7 @@ import org.junit.Test
 
 class ItemTest{
     private lateinit var item:Item
+
     @Before
     fun setUp() {
         item = Item("Test", 1.4, 5, false)
