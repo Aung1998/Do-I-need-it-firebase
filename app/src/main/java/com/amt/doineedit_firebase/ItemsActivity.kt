@@ -74,16 +74,7 @@ class ItemsActivity : AppCompatActivity() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val item = snapshot.getValue(Item::class.java)
-                if (item != null) {
-                    for (i in 0 until itemArrayList.size) {
-                        if (itemArrayList[i].toMap() != item.toMap()) {
-                            itemArrayList[i] = item
-                            recyclerViewAdapter.notifyItemChanged(i)
-                            break
-                        }
-                    }
-                }
+                // do nothing since item already changed from Recycler View Adapter
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {

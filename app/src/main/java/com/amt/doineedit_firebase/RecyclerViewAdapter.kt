@@ -88,6 +88,9 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                         ref.child("Users").child(user!!.uid).child("Items")
                             .child(itemID)
                             .updateChildren(item.toMap())
+                        itemArrayList[holder.adapterPosition] = item
+                        closeMenu()
+                        notifyItemChanged(holder.adapterPosition)
                     }
 
                     override fun geoAdd(itemKey: String) {

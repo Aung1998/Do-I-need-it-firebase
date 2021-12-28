@@ -34,9 +34,9 @@ class RegisterActivity : AppCompatActivity() {
 
         val btnNavLogin = findViewById<Button>(R.id.btnNavLoogin)
 
+        // log in screen navigate
         btnNavLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            navigateLogin()
         }
 
         btnRegister.setOnClickListener{
@@ -48,28 +48,33 @@ class RegisterActivity : AppCompatActivity() {
             val pass = etConfirmPassword?.text.toString()
             if(email.isBlank() || password.isBlank()){
                 Toast.makeText(this, "Please Enter Email or Password", Toast.LENGTH_SHORT).show()
-            }
-            else if(password != pass){
+            } else if(password != pass){
                 // do nothing since error message was shown as user type
-            }
-            else{
+            } else{
                 register(email, password)
             }
         }
     }
 
+    // register user account to firebase
     private fun register(email:String,  password:String){
         auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task->
                 if (task.isSuccessful) {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
+                    // go back to login screen if successful
+                    navigateLogin()
             } else {
                 // if registration failed, show the error message that user can understand
                 Toast.makeText(baseContext, task.exception!!.localizedMessage,
                     Toast.LENGTH_SHORT).show()
             }
             }
+    }
+
+    // navigate to login screen
+    private fun navigateLogin(){
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 }
