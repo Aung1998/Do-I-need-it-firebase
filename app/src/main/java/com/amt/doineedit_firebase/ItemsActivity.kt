@@ -122,6 +122,7 @@ class ItemsActivity : AppCompatActivity() {
                     .child(key).setValue(item)
             }
 
+            // work only if the map app was opened before using Do-I-need-it.
             @SuppressLint("MissingPermission")
             override fun geoAdd(itemKey: String) {
                 val geofire = GeoFire(ref.child("Users").child(user.uid).child("Item locations"))
@@ -139,6 +140,7 @@ class ItemsActivity : AppCompatActivity() {
         }).show()
     }
 
+    // function that check if location permission have been granted and if not granted, ask for permission
     private fun isLocationPermissionGranted(): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 this,
@@ -162,6 +164,7 @@ class ItemsActivity : AppCompatActivity() {
         }
     }
 
+    // swipe function on ITem
     private fun createItemTouchListener(): ItemTouchHelper {
         val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(
             0,

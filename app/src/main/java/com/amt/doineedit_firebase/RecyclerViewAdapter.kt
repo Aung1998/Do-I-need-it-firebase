@@ -116,7 +116,9 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                     }
 
                     override fun onCancelled(databaseError: DatabaseError?) {
-                        TODO("Not yet implemented")
+                        if (databaseError != null) {
+                            Toast.makeText(it.context, databaseError.message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 })
             }
