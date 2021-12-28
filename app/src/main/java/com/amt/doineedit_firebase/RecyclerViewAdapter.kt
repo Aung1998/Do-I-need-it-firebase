@@ -59,6 +59,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
 
             holder.cbPurchased.isEnabled = false
 
+            // Item View Holder
             holder.itemView.setOnClickListener{
                 val item = itemArrayList[holder.adapterPosition]
                 val message = "Item Name - ${item.itemName}\n " +
@@ -75,8 +76,9 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                 holder.itemView.context.startActivity(shareIntent)
             }
         }
-        else if (holder is MenuHolder){ // Menu View Holder
-            // itemID for specifics item.
+        // Menu View Holder
+        else if (holder is MenuHolder){
+            // itemID for specific item.
             val itemID = itemIDList[holder.adapterPosition]
             val item = itemArrayList[holder.adapterPosition]
             val user = FirebaseAuth.getInstance().currentUser
