@@ -84,7 +84,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
             //Edit Item Button
             (holder as MenuHolder).btnEditText.setOnClickListener{
                 ItemDialog(it.context, object : DialogListener{
-                    override fun onAddButtonClicked(item: Item){
+                    override fun onDoneButtonClicked(item: Item){
                         ref.child("Users").child(user!!.uid).child("Items")
                             .child(itemID)
                             .updateChildren(item.toMap())
@@ -101,7 +101,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
             //Location Button
             (holder as MenuHolder).btnFindLocation.setOnClickListener{
                 val geoFire = GeoFire(ref.child("Users").child(user!!.uid).child("Item locations"))
-                val location =geoFire.getLocation(itemID, object: LocationCallback{
+                geoFire.getLocation(itemID, object: LocationCallback{
                     override fun onLocationResult(key: String?, location: GeoLocation?) {
                         if (location!=null){
                             val gmmIntentUri = Uri.parse("geo:${location.latitude},${location.longitude}")

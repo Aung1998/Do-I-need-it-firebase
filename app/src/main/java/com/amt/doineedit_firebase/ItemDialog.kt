@@ -51,7 +51,7 @@ class ItemDialog(context: Context,var dialogListener: DialogListener, var editIt
                 val item : Item = Item(itemName = itemName, quantity = quantity.toInt(),
                     price = price.toDouble(), haveItem = purchased)
 
-                dialogListener.onAddButtonClicked(item)
+                dialogListener.onDoneButtonClicked(item)
 
                 if(located){
                     dialogListener.geoAdd("item key")

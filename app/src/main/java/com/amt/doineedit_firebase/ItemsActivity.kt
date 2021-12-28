@@ -111,7 +111,8 @@ class ItemsActivity : AppCompatActivity() {
     fun addItem(v:View){
         ItemDialog(v.context, object : DialogListener{
             lateinit var key: String
-            override fun onAddButtonClicked(item: Item) {
+
+            override fun onDoneButtonClicked(item: Item) {
                 key = ref.child("Users")
                     .child(user.uid)
                     .child("Items")
@@ -188,10 +189,11 @@ class ItemsActivity : AppCompatActivity() {
                         ref.child("Users").child(user.uid).child("Items")
                             .child(itemIdList[viewHolder.adapterPosition])
                             .removeValue()
+
                         ref.child("Users").child(user.uid).child("Item locations")
                             .child(itemIdList[viewHolder.adapterPosition])
                             .removeValue()
-                            .addOnFailureListener { /*do nothing*/ }
+                            .addOnFailureListener { /* In case of location doesn't exist */ }
                         }
                 }
                 else{
