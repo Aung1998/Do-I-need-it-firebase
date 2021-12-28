@@ -1,11 +1,9 @@
 package com.amt.doineedit_firebase
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -18,13 +16,10 @@ import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.LocationCallback
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 
-class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:ArrayList<String>):
+class RecyclerViewAdapter(var itemArrayList: ArrayList<Item>, var itemIDList: ArrayList<String>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val SHOW_MENU = 1
@@ -33,24 +28,26 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == HIDE_MENU) {
-            val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.item_adapter, parent, false)
+            val inflatedView =
+                LayoutInflater.from(parent.context).inflate(R.layout.item_adapter, parent, false)
             ItemHolder(inflatedView)
-        }else{
-            val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.menu_adapter, parent, false)
+        } else {
+            val inflatedView =
+                LayoutInflater.from(parent.context).inflate(R.layout.menu_adapter, parent, false)
             MenuHolder(inflatedView)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (itemArrayList[position].showMenu){
+        return if (itemArrayList[position].showMenu) {
             SHOW_MENU
-        } else{
+        } else {
             HIDE_MENU
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemHolder){//Check if view Holder is Item View Holder or
+        if (holder is ItemHolder) {//Check if view Holder is Item View Holder or
             val currentItem = itemArrayList[position]
             holder.tvName.text = currentItem.itemName
             holder.tvPrice.text = "$${currentItem.price}"
@@ -60,12 +57,12 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
             holder.cbPurchased.isEnabled = false
 
             // Item View Holder
-            holder.itemView.setOnClickListener{
+            holder.itemView.setOnClickListener {
                 val item = itemArrayList[holder.adapterPosition]
                 val message = "Item Name - ${item.itemName}\n " +
                         "Quantity - ${item.quantity}\n" +
                         "Price - ${item.price}" +
-                        "Have bought? - ${if(item.haveItem) "yes" else "no"}"
+                        "Have bought? - ${if (item.haveItem) "yes" else "no"}"
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, message)
@@ -77,16 +74,16 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
             }
         }
         // Menu View Holder
-        else if (holder is MenuHolder){
+        else if (holder is MenuHolder) {
             // itemID for specific item.
             val itemID = itemIDList[holder.adapterPosition]
             val item = itemArrayList[holder.adapterPosition]
             val user = FirebaseAuth.getInstance().currentUser
             val ref = FirebaseDatabase.getInstance().reference
             //Edit Item Button
-            (holder as MenuHolder).btnEditText.setOnClickListener{
-                ItemDialog(it.context, object : DialogListener{
-                    override fun onDoneButtonClicked(item: Item){
+            holder.btnEditText.setOnClickListener {
+                ItemDialog(it.context, object : DialogListener {
+                    override fun onDoneButtonClicked(item: Item) {
                         ref.child("Users").child(user!!.uid).child("Items")
                             .child(itemID)
                             .updateChildren(item.toMap())
@@ -101,25 +98,27 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
                 }, item).show()
             }
             //Location Button
-            (holder as MenuHolder).btnFindLocation.setOnClickListener{
+            holder.btnFindLocation.setOnClickListener {
                 val geoFire = GeoFire(ref.child("Users").child(user!!.uid).child("Item locations"))
-                geoFire.getLocation(itemID, object: LocationCallback{
+                geoFire.getLocation(itemID, object : LocationCallback {
                     override fun onLocationResult(key: String?, location: GeoLocation?) {
-                        if (location!=null){
-                            val gmmIntentUri = Uri.parse("geo:${location.latitude},${location.longitude}")
+                        if (location != null) {
+                            val gmmIntentUri =
+                                Uri.parse("geo:${location.latitude},${location.longitude}")
                             val intent = holder.showMap(gmmIntentUri)
                             val context = it.context
                             intent.setPackage("com.google.android.apps.maps")
                             context.startActivity(intent)
-                        }
-                        else{
-                            Toast.makeText(it.context, "Location Not Found", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(it.context, "Location Not Found", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError?) {
                         if (databaseError != null) {
-                            Toast.makeText(it.context, databaseError.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(it.context, databaseError.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 })
@@ -132,7 +131,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
     }
 
 
-//Switch to Menu View
+    //Switch to Menu View
     fun showMenu(position: Int) {
         for (i in 0 until itemArrayList.size) {
             itemArrayList[i].showMenu = false
@@ -142,7 +141,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
     }
 
 
-//Check if the MEnu View is switched
+    //Check if the MEnu View is switched
     fun isMenuShown(): Boolean {
         for (i in 0 until itemArrayList.size) {
             if (itemArrayList[i].showMenu) {
@@ -152,7 +151,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         return false
     }
 
-//Switch to item View
+    //Switch to item View
     fun closeMenu() {
         for (i in 0 until itemArrayList.size) {
             itemArrayList[i].showMenu = false
@@ -160,7 +159,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         notifyDataSetChanged()
     }
 
-//Item View Holder Class
+    //Item View Holder Class
     inner class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName = itemView.findViewById<TextView>(R.id.tvName)!!
         val tvPrice = itemView.findViewById<TextView>(R.id.tvPrice)!!
@@ -168,7 +167,7 @@ class RecyclerViewAdapter (var itemArrayList: ArrayList<Item>, var itemIDList:Ar
         val cbPurchased = itemView.findViewById<CheckBox>(R.id.cbPurchased)!!
     }
 
-//Menu View Holder Class
+    //Menu View Holder Class
     inner class MenuHolder(menuView: View) : RecyclerView.ViewHolder(menuView) {
         val btnEditText = menuView.findViewById<Button>(R.id.btnEditItem)
         val btnFindLocation = menuView.findViewById<Button>(R.id.btnFindLocation)

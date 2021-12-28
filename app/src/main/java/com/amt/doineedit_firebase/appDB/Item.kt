@@ -4,7 +4,12 @@ import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
-data class Item(val itemName: String="", val price:Double= 0.0, val quantity:Int=1, val haveItem:Boolean = false){
+data class Item(
+    val itemName: String = "",
+    val price: Double = 0.0,
+    val quantity: Int = 1,
+    val haveItem: Boolean = false
+) {
     var showMenu = false // to validate Menu shown or not
 
     @Exclude
