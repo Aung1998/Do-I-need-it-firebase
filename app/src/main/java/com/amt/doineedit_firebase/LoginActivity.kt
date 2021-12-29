@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.amt.doineedit_firebase.Users.UserRepository
+import com.amt.doineedit_firebase.Users.UserRepositoryImplement
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -13,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    private var user: FirebaseUser? = null
+    private lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +41,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    //
     private fun accountLogin(email: String, password: String) {
-        auth = Firebase.auth
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val intent = Intent(this, ItemsActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
-            }
+        auth = FirebaseAuth.getInstance()
+        userRepository = UserRepositoryImplement(auth, baseContext)
+        userRepository.login(email, password)
     }
 
     private fun navigateToRegister() {

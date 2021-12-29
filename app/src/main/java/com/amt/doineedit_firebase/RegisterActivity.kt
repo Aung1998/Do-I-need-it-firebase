@@ -8,11 +8,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import com.amt.doineedit_firebase.Users.UserRepository
+import com.amt.doineedit_firebase.Users.UserRepositoryImplement
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var userRepository: UserRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -57,19 +60,8 @@ class RegisterActivity : AppCompatActivity() {
     // register user account to firebase
     private fun register(email: String, password: String) {
         auth = FirebaseAuth.getInstance()
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // go back to login screen if successful
-                    navigateLogin()
-                } else {
-                    // if registration failed, show the error message that user can understand
-                    Toast.makeText(
-                        baseContext, task.exception!!.localizedMessage,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+        userRepository = UserRepositoryImplement(auth, baseContext)
+        userRepository.register(email, password)
     }
 
     // navigate to login screen
