@@ -177,8 +177,6 @@ class RecyclerViewAdapter(var itemArrayList: ArrayList<Item>, var itemIDList: Ar
             }
             return intent
         }
-
     }
-
 
 }

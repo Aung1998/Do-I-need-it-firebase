@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 /*
  User Account management class
  Can login and register user
+ You should add function to UserRepository interface class before adding function to this
 * */
 class UserRepositoryImplement constructor(
     private val firebaseAuth: FirebaseAuth,
@@ -20,7 +21,7 @@ class UserRepositoryImplement constructor(
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful){
                 val intent = Intent(context, ItemsActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK // To start activity on this class
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK // To start activity on Non activity class
                 context.startActivity(intent)
             }
         }

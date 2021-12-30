@@ -9,9 +9,6 @@ import com.amt.doineedit_firebase.Users.UserRepository
 import com.amt.doineedit_firebase.Users.UserRepositoryImplement
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth

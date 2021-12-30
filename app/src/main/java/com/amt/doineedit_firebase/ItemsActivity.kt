@@ -97,10 +97,12 @@ class ItemsActivity : AppCompatActivity() {
                 }
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
+                    /* Since the application doesn't support sorting item yet, no implementation is needed here.
+                    * Implement changes here if the sorting function added. */
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    /* Will invoked when the error such as sudden internet connection cut was raised  */
                     Toast.makeText(baseContext, error.message, Toast.LENGTH_SHORT).show()
                 }
 
@@ -129,7 +131,7 @@ class ItemsActivity : AppCompatActivity() {
             }
 
             // work only if the map app was opened before using Do-I-need-it.
-            @SuppressLint("MissingPermission")
+            @SuppressLint("MissingPermission") // Already checked permission with on permisson value
             override fun geoAdd(itemKey: String) {
                 val geofire = GeoFire(ref.child("Users").child(user.uid).child("Item locations"))
                 if (permission) {
