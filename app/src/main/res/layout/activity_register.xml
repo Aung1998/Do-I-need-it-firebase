@@ -52,7 +52,7 @@
         android:layout_width="185dp"
         android:layout_height="50dp"
         android:layout_margin="25dp"
-        android:hint="@string/txt_password"
+        android:hint="@string/txt_confirm_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutPassword">
@@ -74,12 +74,27 @@
         app:layout_constraintTop_toBottomOf="@+id/textLayoutConfirmPassword" />
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@color/teal_200"
+        android:id="@+id/btnNavLoogin"
         android:text="@string/txt_btn_to_login"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintStart_toEndOf="@+id/textViewRegister" />
+
+    <TextView
+        android:id="@+id/textViewRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="32dp"
+        android:text="Already have an account?"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
